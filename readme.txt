@@ -1,115 +1,137 @@
 === Helpy ===
-Contributors: (this should be a list of wordpress.org userid's)
-Donate link: https://example.com/
-Tags: comments, spam
-Requires at least: 4.5
+Contributors: denisdums
+Donate link: https://denisdums.com/
+Tags: help, admin, dashboard, gutenberg, documentation, tutorial, redmine, workflow, client
+Requires at least: 6.2
 Tested up to: 6.8.3
-Requires PHP: 5.6
-Stable tag: 0.1.0
+Requires PHP: 8.0
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
+Contextual help and video tutorial links for clients, right inside the WordPress dashboard and editor.
 
 == Description ==
 
-This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
+Helpy is a lightweight WordPress plugin built for web agencies and project managers who want to offer contextual help and training resources directly in the WordPress back office.
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+It displays a “Help” panel inside the editor sidebar (Gutenberg) or as a classic metabox, and adds a Dashboard widget with global documentation links. You can define help links globally or per post type — ideal for showing clients Loom or YouTube tutorials, documentation, or a “Create ticket” button linked to your Redmine project.
 
-A few notes about the sections above:
+The plugin is fully object-oriented, uses its own database tables, and provides a clean admin interface with import/export tools.
 
-*   "Contributors" is a comma separated list of wp.org/wp-plugins.org usernames
-*   "Tags" is a comma separated list of tags that apply to the plugin
-*   "Requires at least" is the lowest version that the plugin will work on
-*   "Tested up to" is the highest version that you've *successfully used to test the plugin*. Note that it might work on
-higher versions... this is just the highest one you've verified.
-*   Stable tag should indicate the Subversion "tag" of the latest stable version, or "trunk," if you use `/trunk/` for
-stable.
+== Features ==
 
-    Note that the `readme.txt` of the stable tag is the one that is considered the defining one for the plugin, so
-if the `/trunk/readme.txt` file says that the stable tag is `4.3`, then it is `/tags/4.3/readme.txt` that'll be used
-for displaying information about the plugin.  In this situation, the only thing considered from the trunk `readme.txt`
-is the stable tag pointer.  Thus, if you develop in trunk, you can update the trunk `readme.txt` to reflect changes in
-your in-development version, without having that information incorrectly disclosed about the current stable version
-that lacks those changes -- as long as the trunk's `readme.txt` points to the correct stable tag.
+* Contextual help box in the editor sidebar (Gutenberg)
+* Fallback metabox in the Classic Editor
+* Dashboard widget with global help links
+* Per post type or global help lists
+* Link types: Video (Loom, YouTube, Vimeo), Documentation, Custom URL
+* Optional Redmine integration (“Create ticket” button)
+* Simple admin page with collapsible panels
+* JSON import/export for duplicating configuration
+* Custom DB tables (no data stored in wp_options)
+* WP-CLI commands for export/import/doctor/seed
+* Fully OOP architecture following WordPress coding standards
+* Safe sanitization, capability checks, uninstall cleanup
 
-    If no stable tag is provided, it is assumed that trunk is stable, but you should specify "trunk" if that's where
-you put the stable version, in order to eliminate any doubt.
+== Typical Use Cases ==
+
+* Delivering WordPress sites to clients who need onboarding or video tutorials
+* Internal documentation or training for content editors
+* Projects managed via Redmine or other issue trackers
+
+== WP-CLI Integration ==
+
+# Check installation
+wp helpy doctor
+
+# Export configuration to JSON
+wp helpy export --out=helpy.json
+
+# Import configuration from JSON
+wp helpy import --file=helpy.json
+
+# Seed example data
+wp helpy seed
 
 == Installation ==
 
-This section describes how to install the plugin and get it working.
-
-e.g.
-
-1. Upload `plugin-name.php` to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Place `<?php do_action('plugin_name_hook'); ?>` in your templates
+1. Upload the helpy folder to the /wp-content/plugins/ directory.
+2. Activate Helpy through the Plugins screen.
+3. Go to Settings → Aide projet (Helpy) to configure your links.
+4. (Optional) Configure Redmine (base URL and project identifier).
+5. Edit a post or page — the Helpy box will appear in the sidebar (or as a metabox if using the Classic Editor).
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= Does Helpy work without Gutenberg? =
 
-An answer to that question.
+Yes. If Gutenberg is disabled, Helpy automatically uses a classic metabox instead of the sidebar panel.
 
-= What about foo bar? =
+= Where are the settings stored? =
 
-Answer to foo bar dilemma.
+Helpy uses its own custom tables (wp_helpy_links and wp_helpy_redmine) to avoid polluting the wp_options table.
+
+= Can I export or migrate my configuration? =
+
+Yes. You can export or import your entire configuration as a JSON file from the admin settings page or via WP-CLI.
+
+= How does the Redmine button work? =
+
+If enabled, Helpy displays a “Create ticket” button that opens your Redmine issue creation page. Authentication is handled by Redmine — no API tokens or credentials are stored.
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. Admin settings page with collapsible panels for Global Links, Post Type Links, Redmine, and Import/Export.
+2. Helpy panel inside the Gutenberg editor sidebar.
+3. Dashboard widget showing global help links.
+4. Classic editor metabox fallback view.
 
 == Changelog ==
 
-= 1.0 =
-* A change since the previous version.
-* Another change.
-
-= 0.5 =
-* List versions from most recent at top to oldest at bottom.
+= 1.0.0 =
+* Initial release.
+* Gutenberg sidebar panel + Classic metabox fallback.
+* Dashboard widget.
+* Redmine integration.
+* Custom DB tables for configuration.
+* Admin settings page with collapsible panels.
+* JSON import/export + WP-CLI support.
+* Fully OOP plugin architecture.
 
 == Upgrade Notice ==
 
-= 1.0 =
-Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
+= 1.0.0 =
+First stable release — adds contextual help system with Redmine integration, Gutenberg panel, and dashboard widget.
 
-= 0.5 =
-This version fixes a security related bug.  Upgrade immediately.
+== Developer Notes ==
 
-== Arbitrary section ==
+Namespaces:
 
-You may provide arbitrary sections, in the same format as the ones above.  This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation."  Arbitrary sections will be shown below the built-in sections outlined above.
+* Helpy\Admin — Admin settings UI.
+* Helpy\Editor — Gutenberg + Classic editor logic.
+* Helpy\Dashboard — Dashboard widget.
+* Helpy\DB — Database and repositories.
+* Helpy\Application — Core services.
+* Helpy\CLI — WP-CLI commands.
 
-== A brief Markdown Example ==
+Custom tables:
 
-Ordered list:
+* wp_helpy_links
+* wp_helpy_redmine
 
-1. Some feature
-1. Another feature
-1. Something else about the plugin
+Schema version is stored in helpy_schema_version for migrations.
 
-Unordered list:
+Helpy follows WordPress security best practices (nonces, capabilities, sanitization, uninstall cleanup).
 
-* something
-* something else
-* third thing
+== Example ==
 
-Here's a link to [WordPress](https://wordpress.org/ "Your favorite software") and one to [Markdown's Syntax Documentation][markdown syntax].
-Titles are optional, naturally.
+1. Add or edit a post or page.
+2. Look for the Helpy panel on the right.
+3. Click 🎥 to open a tutorial or 📄 to view documentation.
+4. Use the Create a ticket button to report issues (if Redmine is enabled).
 
-[markdown syntax]: https://daringfireball.net/projects/markdown/syntax
-            "Markdown is what the parser uses to process much of the readme file"
+== Credits ==
 
-Markdown uses email style notation for blockquotes and I've been told:
-> Asterisks for *emphasis*. Double it up  for **strong**.
-
-`<?php code(); // goes in backticks ?>`
+Built with ❤️ by Denis Dumont (https://denisdums.com/)  
+for creative agencies and project managers who care about user autonomy.
