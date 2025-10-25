@@ -1,0 +1,25 @@
+/* Aère les panneaux et assure le padding interne */
+#poststuff .postbox { margin-bottom: 16px; }
+#poststuff .postbox .inside { padding: 12px 12px 0; }
+
+/* Harmonise les entêtes (au cas où un thème admin override) */
+#poststuff .postbox .hndle { cursor: default; padding: 8px 12px; }
+
+/* Tables de liens full width */
+.helpy-table input[type="text"],
+.helpy-table input[type="url"],
+.helpy-table input[type="number"],
+.helpy-table select { width: 100%; }
+
+/* Séparateurs dans la section Post Types */
+.helpy-pt-box + hr { border: 0; border-top: 1px solid #e2e4e7; margin: 16px 0; }
+
+/* Listes Helpy (admin : settings, dashboard, classic editor) */
+.helpy-list { 
+  list-style: disc; 
+  margin: 0 0 8px 1.25rem;
+}
+.helpy-list li { 
+  list-style: disc; 
+  margin: 0 0 6px; 
+}

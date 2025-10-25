@@ -1,0 +1,9 @@
+/* Listes Helpy dans le block editor (Gutenberg) */
+.helpy-panel .helpy-list {
+  list-style: disc;
+  margin: 0 0 8px 1.25rem;
+}
+.helpy-panel .helpy-list li {
+  list-style: disc;
+  margin: 0 0 6px;
+}
