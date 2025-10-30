@@ -1,5 +1,5 @@
 {
-  "name": "denis/helpy",
+  "name": "denisdums/helpy",
   "type": "wordpress-plugin",
   "autoload": {
     "psr-4": {

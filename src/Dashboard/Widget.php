@@ -5,13 +5,12 @@ use Helpy\Application\HelpyService;
 
 class Widget {
     public static function register(): void {
-        wp_add_dashboard_widget('helpy_widget', 'Helpy — Liens globaux', [self::class, 'render']);
+        wp_add_dashboard_widget('helpy_widget', 'Helpy — Global links', [self::class, 'render']);
     }
 
     public static function render(): void {
         $service = new HelpyService();
-        $links = $service->getGlobalLinks();
-        $redmine = $service->getRedmine();
+        $links   = $service->getGlobalLinks();
 
         echo '<div class="helpy-widget">';
         if ($links) {
@@ -19,15 +18,16 @@ class Widget {
             foreach ($links as $l) {
                 $icon = $l['icon'] ? esc_html($l['icon']).' ' : '';
                 $target = $l['target'] === '_self' ? '_self' : '_blank';
-                echo '<li style="margin-bottom:6px;"><a rel="noopener noreferrer" target="'.esc_attr($target).'" href="'.esc_url($l['url']).'">'.$icon.esc_html($l['label']).'</a></li>';
+                echo '<li class="helpy-li"><a rel="noopener noreferrer" target="'.esc_attr($target).'" href="'.esc_url($l['url']).'">'.$icon.esc_html($l['label']).'</a></li>';
             }
             echo '</ul>';
         } else {
-            echo '<p>Aucun lien global configuré.</p>';
+            echo '<p>No global links configured.</p>';
         }
-        if (!empty($redmine['enabled']) && $redmine['base_url'] && $redmine['project']) {
-            $href = rtrim($redmine['base_url'], '/').'/'.ltrim(str_replace('{project}', rawurlencode($redmine['project']), $redmine['new_issue_path']), '/');
-            echo '<p style="margin-top:8px;"><a class="button button-primary" target="_blank" rel="noopener noreferrer" href="'.esc_url($href).'">Créer un ticket Redmine</a></p>';
+
+        $href = $service->buildTicketUrl();
+        if ($href) {
+            echo '<p style="margin-top:8px;"><a class="button button-primary" target="_blank" rel="noopener noreferrer" href="'.esc_url($href).'">Create ticket</a></p>';
         }
         echo '</div>';
     }

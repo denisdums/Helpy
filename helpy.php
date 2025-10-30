@@ -3,7 +3,7 @@
 /**
  * Plugin Name:     Helpy
  * Plugin URI:      https://denisdums.com/helpy
- * Description:     liens tutos par post type + widget Dashboard + Redmine.
+ * Description:     Build for creative agencies and project managers who care about user autonomy and clarity.
  * Author:          denisdums
  * Author URI:      https://denisdums.com
  * Text Domain:     helpy
@@ -23,7 +23,6 @@ define('HELPY_VER', '1.0.0');
 
 require_once __DIR__ . '/src/Plugin.php';
 
-// Autoload PSR-4 simple (si pas de composer)
 spl_autoload_register(function ($class) {
     if (strpos($class, 'Helpy\\') !== 0) return;
     $path = __DIR__ . '/src/' . str_replace(['Helpy\\', '\\'], ['', '/'], $class) . '.php';
@@ -35,7 +34,7 @@ register_uninstall_hook(__FILE__, 'helpy_uninstall_hook');
 
 function helpy_uninstall_hook()
 {
-    // délégué à uninstall.php
+    // works on uninstall.php
 }
 
 add_action('plugins_loaded', function () {

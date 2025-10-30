@@ -4,9 +4,9 @@ namespace Helpy\Domain;
 class Link {
     public string $label;
     public string $url;
-    public string $type;   // video|doc|custom
+    public string $type;   
     public ?string $icon;
-    public string $target; // _blank|_self
+    public string $target;
     public int $sort_order;
 
     public function __construct(array $a) {

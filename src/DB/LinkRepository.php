@@ -27,10 +27,13 @@ class LinkRepository {
         foreach ($rows as $r) {
             if ($r['scope_type'] === 'global') {
                 $out['global'][] = $r;
-            } else {
+            } else if ($r['scope_type'] === 'post_type') {
                 $out['post_type'][$r['scope_key']][] = $r;
+            } else {
+                $out['taxonomy'][$r['scope_key']][] = $r;
             }
         }
+
         return $out;
     }
 

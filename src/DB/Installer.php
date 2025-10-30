@@ -1,13 +1,16 @@
 <?php
+
 namespace Helpy\DB;
 
-class Installer {
-    public static function activate(): void {
+class Installer
+{
+    public static function activate(): void
+    {
         global $wpdb;
 
         $charset = $wpdb->get_charset_collate();
         $links   = $wpdb->prefix . 'helpy_links';
-        $redmine = $wpdb->prefix . 'helpy_redmine';
+        $options = $wpdb->prefix . 'helpy_options';
 
         $sql = "
 CREATE TABLE $links (
@@ -26,33 +29,23 @@ CREATE TABLE $links (
   KEY scope (scope_type, scope_key, sort_order)
 ) $charset;
 
-CREATE TABLE $redmine (
-  id TINYINT UNSIGNED NOT NULL,
-  enabled TINYINT(1) NOT NULL DEFAULT 0,
-  base_url VARCHAR(255) NULL,
-  project  VARCHAR(120) NULL,
-  new_issue_path VARCHAR(255) NULL DEFAULT '/projects/{project}/issues/new',
-  updated_at DATETIME NOT NULL,
-  PRIMARY KEY (id)
+CREATE TABLE $options (
+  option_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  option_name VARCHAR(191) NOT NULL,
+  option_value LONGTEXT NULL,
+  autoload TINYINT(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (option_id),
+  UNIQUE KEY option_name (option_name)
 ) $charset;
 ";
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         dbDelta($sql);
 
-        if (!get_option('helpy_schema_version')) {
-            add_option('helpy_schema_version', '1');
-        }
-        // Seed Redmine row if not exists
-        $exists = $wpdb->get_var("SELECT COUNT(*) FROM $redmine WHERE id=1");
-        if (!$exists) {
-            $wpdb->insert($redmine, [
-                'id' => 1,
-                'enabled' => 0,
-                'base_url' => '',
-                'project' => '',
-                'new_issue_path' => '/projects/{project}/issues/new',
-                'updated_at' => current_time('mysql')
-            ]);
+        $current = get_option('helpy_schema_version');
+        if (!$current) {
+            add_option('helpy_schema_version', '2');
+        } elseif (version_compare((string)$current, '2', '<')) {
+            update_option('helpy_schema_version', '2');
         }
     }
 }

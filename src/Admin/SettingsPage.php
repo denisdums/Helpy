@@ -4,7 +4,7 @@ namespace Helpy\Admin;
 
 use Helpy\Application\ImportExportService;
 use Helpy\DB\LinkRepository;
-use Helpy\DB\RedmineRepository;
+use Helpy\DB\OptionsRepository;
 use Helpy\Domain\Scope;
 
 class SettingsPage
@@ -24,28 +24,40 @@ class SettingsPage
   {
     if (!current_user_can('manage_options')) wp_die('Forbidden');
 
-    $linksRepo  = new LinkRepository();
-    $redRepo    = new RedmineRepository();
+    $linksRepo = new LinkRepository();
+    $optsRepo  = new OptionsRepository();
 
     $grouped    = $linksRepo->getAllGrouped();
-    $redmine    = $redRepo->get();
     $postTypes  = get_post_types(['public' => true], 'objects');
+    $taxonomies = get_taxonomies(['public' => true], 'objects');
+
+    $ticketing = $optsRepo->get('ticketing', []);
+    $ticketing = wp_parse_args($ticketing, [
+      'enabled'        => false,
+      'base_url'       => '',
+      'project'        => '',
+      'new_issue_path' => '/new?project={project}',
+      'button_label'   => 'Create ticket',
+      'icon'           => '🐞',
+    ]);
 ?>
     <div class="wrap">
       <h1>Helpy — Réglages</h1>
+      <?php if (!empty($_GET['updated'])): ?>
+        <div class="notice notice-success">
+          <p>Réglages enregistrés.</p>
+        </div>
+      <?php endif; ?>
 
       <div id="poststuff">
         <div id="post-body" class="metabox-holder columns-1">
           <div id="post-body-content">
             <div id="normal-sortables" class="meta-box-sortables ui-sortable">
-              <!-- Postbox : Liens globaux -->
-              <div class="postbox closed">
-                <div class="postbox-header">
-                  <h2 class="hndle ui-sortable-handle">Liens globaux</h2>
-                  <div class="handle-actions hide-if-no-js"><button type="button" class="handle-order-higher" aria-disabled="true">
-                    <button type="button" class="handlediv" aria-expanded="true"><span class="toggle-indicator" aria-hidden="true"></span></button>
-                  </div>
-                </div>
+
+              <!-- Liens globaux -->
+              <div class="postbox">
+                <button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Basculer le panneau : Liens globaux</span><span class="toggle-indicator" aria-hidden="true"></span></button>
+                <h2 class="hndle"><span>Liens globaux</span></h2>
                 <div class="inside">
                   <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                     <?php wp_nonce_field('helpy_save'); ?>
@@ -97,19 +109,15 @@ class SettingsPage
                 </div>
               </div>
 
-              <!-- Postbox : Liens par post type -->
-              <div class="postbox closed">
-                <div class="postbox-header">
-                  <h2 class="hndle ui-sortable-handle">Liens par post type</h2>
-                  <div class="handle-actions hide-if-no-js"><button type="button" class="handle-order-higher" aria-disabled="true">
-                    <button type="button" class="handlediv" aria-expanded="true"><span class="toggle-indicator" aria-hidden="true"></span></button>
-                  </div>
-                </div>
+              <!-- Liens par post type -->
+              <div class="postbox">
+                <button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Basculer le panneau : Liens par post type</span><span class="toggle-indicator" aria-hidden="true"></span></button>
+                <h2 class="hndle"><span>Liens par post type</span></h2>
                 <div class="inside">
                   <?php foreach ($postTypes as $slug => $obj):
                     $rows = $grouped['post_type'][$slug] ?? []; ?>
                     <div class="helpy-pt-box">
-                      <h3 style="margin-top:0;"><?php echo esc_html($obj->labels->singular_name); ?></h3>
+                      <h3 style="margin-top:0;"><?php echo esc_html($obj->labels->singular_name . " ({$slug})"); ?></h3>
                       <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                         <?php wp_nonce_field('helpy_save'); ?>
                         <input type="hidden" name="action" value="helpy_save">
@@ -161,50 +169,110 @@ class SettingsPage
                 </div>
               </div>
 
-              <!-- Postbox : Redmine -->
-              <div class="postbox closed">
-                <div class="postbox-header">
-                  <h2 class="hndle ui-sortable-handle">Redmine</h2>
-                  <div class="handle-actions hide-if-no-js"><button type="button" class="handle-order-higher" aria-disabled="true">
-                    <button type="button" class="handlediv" aria-expanded="true"><span class="toggle-indicator" aria-hidden="true"></span></button>
-                  </div>
+              <!-- Liens par taxonomie (NOUVEAU) -->
+              <div class="postbox">
+                <button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Basculer le panneau : Liens par taxonomie</span><span class="toggle-indicator" aria-hidden="true"></span></button>
+                <h2 class="hndle"><span>Liens par taxonomie</span></h2>
+                <div class="inside">
+                  <?php foreach ($taxonomies as $tax => $obj):
+                    $rows = $grouped['taxonomy'][$tax] ?? []; ?>
+                    <div class="helpy-tax-box">
+                      <h3 style="margin-top:0;"><?php echo esc_html($obj->labels->singular_name . " ({$tax})"); ?></h3>
+                      <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+                        <?php wp_nonce_field('helpy_save'); ?>
+                        <input type="hidden" name="action" value="helpy_save">
+                        <input type="hidden" name="scope_type" value="taxonomy">
+                        <input type="hidden" name="scope_key" value="<?php echo esc_attr($tax); ?>">
+                        <table class="widefat striped helpy-table">
+                          <thead>
+                            <tr>
+                              <th>Ordre</th>
+                              <th>Label</th>
+                              <th>URL</th>
+                              <th>Type</th>
+                              <th>Icône</th>
+                              <th>Cible</th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody id="helpy-tax-<?php echo esc_attr($tax); ?>-tbody">
+                            <?php foreach ($rows as $i => $r): ?>
+                              <tr>
+                                <td><input type="number" name="items[<?php echo $i; ?>][sort_order]" value="<?php echo (int)$r['sort_order']; ?>" /></td>
+                                <td><input type="text" name="items[<?php echo $i; ?>][label]" value="<?php echo esc_attr($r['label']); ?>" /></td>
+                                <td><input type="url" name="items[<?php echo $i; ?>][url]" value="<?php echo esc_url($r['url']); ?>" /></td>
+                                <td>
+                                  <select name="items[<?php echo $i; ?>][type]">
+                                    <?php foreach (['video', 'doc', 'custom'] as $t): ?>
+                                      <option value="<?php echo esc_attr($t); ?>" <?php selected($r['type'], $t); ?>><?php echo esc_html($t); ?></option>
+                                    <?php endforeach; ?>
+                                  </select>
+                                </td>
+                                <td><input type="text" name="items[<?php echo $i; ?>][icon]" value="<?php echo esc_attr($r['icon']); ?>" /></td>
+                                <td>
+                                  <select name="items[<?php echo $i; ?>][target]">
+                                    <option value="_blank" <?php selected($r['target'], '_blank'); ?>>_blank</option>
+                                    <option value="_self" <?php selected($r['target'], '_self'); ?>>_self</option>
+                                  </select>
+                                </td>
+                                <td><button type="button" class="button helpy-remove-row">Supprimer</button></td>
+                              </tr>
+                            <?php endforeach; ?>
+                          </tbody>
+                        </table>
+                        <p><button type="button" class="button" data-add-row="#helpy-tax-<?php echo esc_attr($tax); ?>-tbody">Ajouter un lien</button></p>
+                        <p><button type="submit" class="button button-primary">Enregistrer</button></p>
+                      </form>
+                    </div>
+                    <hr>
+                  <?php endforeach; ?>
                 </div>
+              </div>
+
+              <!-- Ticketing -->
+              <div class="postbox">
+                <button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Basculer le panneau : Ticketing</span><span class="toggle-indicator" aria-hidden="true"></span></button>
+                <h2 class="hndle"><span>Ticketing</span></h2>
                 <div class="inside">
                   <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                     <?php wp_nonce_field('helpy_save'); ?>
                     <input type="hidden" name="action" value="helpy_save">
-                    <input type="hidden" name="scope_type" value="redmine">
+                    <input type="hidden" name="scope_type" value="ticketing">
                     <table class="form-table">
                       <tr>
-                        <th>Activer</th>
-                        <td><label><input type="checkbox" name="enabled" value="1" <?php checked($redmine['enabled']); ?>> Oui</label></td>
+                        <th>Enable</th>
+                        <td><label><input type="checkbox" name="enabled" value="1" <?php checked($ticketing['enabled']); ?>> Yes</label></td>
                       </tr>
                       <tr>
                         <th>Base URL</th>
-                        <td><input type="url" name="base_url" class="regular-text" value="<?php echo esc_attr($redmine['base_url']); ?>" placeholder="https://redmine.example.com"></td>
+                        <td><input type="url" name="base_url" class="regular-text" value="<?php echo esc_attr($ticketing['base_url']); ?>" placeholder="https://yourdesk.example.com"></td>
                       </tr>
                       <tr>
-                        <th>Projet</th>
-                        <td><input type="text" name="project" class="regular-text" value="<?php echo esc_attr($redmine['project']); ?>"></td>
+                        <th>Project (optional)</th>
+                        <td><input type="text" name="project" class="regular-text" value="<?php echo esc_attr($ticketing['project']); ?>"></td>
                       </tr>
                       <tr>
-                        <th>Chemin création issue</th>
-                        <td><input type="text" name="new_issue_path" class="regular-text" value="<?php echo esc_attr($redmine['new_issue_path']); ?>"></td>
+                        <th>New issue path</th>
+                        <td><input type="text" name="new_issue_path" class="regular-text" value="<?php echo esc_attr($ticketing['new_issue_path']); ?>" placeholder="/new?project={project}&title={title}"></td>
+                      </tr>
+                      <tr>
+                        <th>Button label</th>
+                        <td><input type="text" name="button_label" class="regular-text" value="<?php echo esc_attr($ticketing['button_label']); ?>"></td>
+                      </tr>
+                      <tr>
+                        <th>Icon (emoji)</th>
+                        <td><input type="text" name="icon" class="regular-text" value="<?php echo esc_attr($ticketing['icon']); ?>" placeholder="🐞"></td>
                       </tr>
                     </table>
-                    <p><button type="submit" class="button button-primary">Enregistrer</button></p>
+                    <p><button type="submit" class="button button-primary">Save</button></p>
                   </form>
                 </div>
               </div>
 
-              <!-- Postbox : Import / Export -->
-              <div class="postbox closed">
-                <div class="postbox-header">
-                  <h2 class="hndle ui-sortable-handle">Import / Export</h2>
-                  <div class="handle-actions hide-if-no-js"><button type="button" class="handle-order-higher" aria-disabled="true">
-                    <button type="button" class="handlediv" aria-expanded="true"><span class="toggle-indicator" aria-hidden="true"></span></button>
-                  </div>
-                </div>
+              <!-- Import / Export -->
+              <div class="postbox">
+                <button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Basculer le panneau : Import / Export</span><span class="toggle-indicator" aria-hidden="true"></span></button>
+                <h2 class="hndle"><span>Import / Export</span></h2>
                 <div class="inside">
                   <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="display:inline-block;margin-right:16px;">
                     <?php wp_nonce_field('helpy_export'); ?>
@@ -215,12 +283,13 @@ class SettingsPage
                   <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="display:inline-block;vertical-align:top;max-width:100%;">
                     <?php wp_nonce_field('helpy_import'); ?>
                     <input type="hidden" name="action" value="helpy_import">
-                    <p><textarea name="payload" rows="8" cols="80" style="width:100%;" placeholder='Collez ici le JSON'></textarea></p>
+                    <p><textarea name="payload" rows="8" cols="80" style="width:100%;" placeholder="Paste JSON here"></textarea></p>
                     <p><button type="submit" class="button button-secondary">Importer (remplace)</button></p>
                   </form>
                 </div>
               </div>
-            </div>
+
+            </div><!-- /normal-sortables -->
           </div><!-- /post-body-content -->
         </div><!-- /post-body -->
       </div><!-- /poststuff -->
@@ -235,7 +304,7 @@ class SettingsPage
 
     $scopeType = sanitize_text_field($_POST['scope_type'] ?? '');
 
-    if ($scopeType === 'global' || $scopeType === 'post_type') {
+    if (in_array($scopeType, ['global', 'post_type', 'taxonomy'], true)) {
       $scopeKey = sanitize_text_field($_POST['scope_key'] ?? '');
       if ($scopeType === 'global') $scopeKey = Scope::GLOBAL;
 
@@ -250,18 +319,19 @@ class SettingsPage
         ];
       }, $_POST['items'] ?? []));
 
-      // label + url requis
       $items = array_values(array_filter($items, fn($i) => $i['label'] && $i['url']));
 
       $repo = new LinkRepository();
       $repo->deleteScope($scopeType, $scopeKey);
       $repo->bulkInsert($scopeType, $scopeKey, $items);
-    } elseif ($scopeType === 'redmine') {
-      (new RedmineRepository())->save([
+    } elseif ($scopeType === 'ticketing') {
+      (new OptionsRepository())->set('ticketing', [
         'enabled'        => !empty($_POST['enabled']),
-        'base_url'       => $_POST['base_url'] ?? '',
-        'project'        => $_POST['project'] ?? '',
-        'new_issue_path' => $_POST['new_issue_path'] ?? '/projects/{project}/issues/new',
+        'base_url'       => esc_url_raw($_POST['base_url'] ?? ''),
+        'project'        => sanitize_text_field($_POST['project'] ?? ''),
+        'new_issue_path' => sanitize_text_field($_POST['new_issue_path'] ?? '/new?project={project}'),
+        'button_label'   => sanitize_text_field($_POST['button_label'] ?? 'Create ticket'),
+        'icon'           => sanitize_text_field($_POST['icon'] ?? '🐞'),
       ]);
     }
 
@@ -294,7 +364,7 @@ class SettingsPage
       (new ImportExportService())->import($data);
       wp_safe_redirect(add_query_arg('updated', '1', admin_url('options-general.php?page=helpy-settings')));
     } else {
-      wp_die('JSON invalide.');
+      wp_die('Invalid JSON.');
     }
     exit;
   }
