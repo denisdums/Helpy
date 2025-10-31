@@ -9,7 +9,7 @@ Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Contextual help and video tutorial links for clients, directly in the WordPress editor, dashboard, and taxonomy term screens.
+Contextual help links for clients, directly in the WordPress editor, dashboard, and taxonomy screens.
 
 == Description ==
 
@@ -17,7 +17,7 @@ Helpy is a lightweight WordPress plugin built for web agencies and project manag
 
 It displays a “Helpy” panel inside the editor sidebar (Gutenberg) or as a classic metabox, adds a Dashboard widget with global links, and now supports displaying contextual help inside taxonomy term edit pages.
 
-You can define links **globally**, **per post type**, **per taxonomy**, or **per specific term** — ideal for showing clients Loom or YouTube tutorials, documentation links, or a “Create ticket” button linked to your favorite ticketing tool (ClickUp, Jira, Notion, Redmine, etc.).
+You can define links **globally**, **per post type**, **per taxonomy**, or **per specific term** - ideal for showing clients Loom or YouTube tutorials, documentation links, or a “Create ticket” button linked to your favorite ticketing tool (ClickUp, Jira, Notion, Redmine, etc.).
 
 The plugin is fully object-oriented, uses custom database tables, and provides a clean admin interface with collapsible panels and JSON import/export.
 
@@ -63,7 +63,7 @@ wp helpy seed
 2. Activate Helpy through the Plugins screen.
 3. Go to **Settings → Helpy** to configure global, post type, and taxonomy links.
 4. (Optional) Configure your ticketing tool (base URL and project name).
-5. Edit a post, page, or term — the Helpy box will appear in the sidebar or in the term editor.
+5. Edit a post, page, or term - the Helpy box will appear in the sidebar or in the term editor.
 
 == Frequently Asked Questions ==
 
@@ -102,19 +102,19 @@ Yes. You can export or import your entire configuration as a JSON file from the 
 
 == Changelog ==
 
-= 1.2.0 =
+= 0.1.2 =
 * Added support for taxonomy and term-specific help links.
 * Replaced Redmine integration with a generic ticketing system.
 * Added new `wp_helpy_options` table for plugin configuration.
 * Updated Import/Export and WP-CLI to handle taxonomy/term data.
 * Improved admin UI with collapsible panels.
 
-= 1.1.0 =
+= 0.1.1 =
 * Introduced generic ticketing system replacing Redmine.
 * Added internal `helpy_options` table.
 * UI and style improvements.
 
-= 1.0.0 =
+= 0.1.0 =
 * Initial release.
 * Gutenberg sidebar panel + Classic Editor fallback.
 * Dashboard widget.
@@ -132,13 +132,13 @@ Update recommended for expanded flexibility.
 
 Namespaces:
 
-* Helpy\Admin — Admin settings UI
-* Helpy\Editor — Gutenberg + Classic editor logic
-* Helpy\Dashboard — Dashboard widget
-* Helpy\Taxonomy — Term and taxonomy support
-* Helpy\DB — Database and repositories
-* Helpy\Application — Core services
-* Helpy\CLI — WP-CLI commands
+* Helpy\Admin - Admin settings UI
+* Helpy\Editor - Gutenberg + Classic editor logic
+* Helpy\Dashboard - Dashboard widget
+* Helpy\Taxonomy - Term and taxonomy support
+* Helpy\DB - Database and repositories
+* Helpy\Application - Core services
+* Helpy\CLI - WP-CLI commands
 
 Custom tables:
 
@@ -157,11 +157,11 @@ Helpy follows WordPress security best practices (nonces, capabilities, sanitizat
 
 1. Add or edit a post or page.
 2. Look for the **Helpy** panel on the right.
-3. Click 🎥 to open a tutorial or 📄 to view documentation.
+3. Click on a link to open a tutorial or to view documentation.
 4. Use the **Create a ticket** button to report issues.
-5. Edit a taxonomy term — the Helpy box appears above the form with relevant links.
+5. Edit a taxonomy term - the Helpy box appears above the form with relevant links.
 
 == Credits ==
 
 Built with ❤️ by [Denis Dumont](https://denisdums.com/)  
-for creative agencies and project managers who care about user autonomy and clarity.
+for agencies and project managers who care about users

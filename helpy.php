@@ -3,7 +3,7 @@
 /**
  * Plugin Name:     Helpy
  * Plugin URI:      https://denisdums.com/helpy
- * Description:     Build for creative agencies and project managers who care about user autonomy and clarity.
+ * Description:     Build for agencies and project managers who care about user autonomy and clarity.
  * Author:          denisdums
  * Author URI:      https://denisdums.com
  * Text Domain:     helpy

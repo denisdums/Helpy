@@ -44,10 +44,10 @@ class Commands {
         $links = $wpdb->prefix.'helpy_links';
         $wpdb->query($wpdb->prepare("DELETE FROM {$links} WHERE scope_type=%s AND scope_key=%s", 'global', 'global'));
         $wpdb->insert($links, [
-            'scope_type'=>'global','scope_key'=>'global','label'=>'Tutorial – Basics','url'=>'https://loom.example/1','type'=>'video','icon'=>'🎥','target'=>'_blank','sort_order'=>0,'created_at'=>current_time('mysql'),'updated_at'=>current_time('mysql')
+            'scope_type'=>'global','scope_key'=>'global','label'=>'Tutorial – Basics','url'=>'https://loom.example/1','target'=>'_blank','sort_order'=>0,'created_at'=>current_time('mysql'),'updated_at'=>current_time('mysql')
         ]);
         $wpdb->insert($links, [
-            'scope_type'=>'global','scope_key'=>'global','label'=>'Documentation','url'=>'https://example.com/docs','type'=>'doc','icon'=>'📄','target'=>'_blank','sort_order'=>1,'created_at'=>current_time('mysql'),'updated_at'=>current_time('mysql')
+            'scope_type'=>'global','scope_key'=>'global','label'=>'Documentation','url'=>'https://example.com/docs','target'=>'_blank','sort_order'=>1,'created_at'=>current_time('mysql'),'updated_at'=>current_time('mysql')
         ]);
         WP_CLI::success('Seeded global links.');
     }

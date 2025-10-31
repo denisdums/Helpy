@@ -2,6 +2,7 @@
 namespace Helpy;
 
 use Helpy\Admin\SettingsPage;
+use Helpy\Admin\PublicLinksPage;
 use Helpy\Dashboard\Widget;
 use Helpy\Editor\Sidebar;
 use Helpy\Editor\Metabox;
@@ -10,6 +11,7 @@ use Helpy\Taxonomy\TermPanel; // NEW
 class Plugin {
     public function init(): void {
         // Admin page + actions
+        add_action('admin_menu', [PublicLinksPage::class, 'register']);
         add_action('admin_menu', [SettingsPage::class, 'register']);
         add_action('admin_post_helpy_save', [SettingsPage::class, 'handleSave']);
         add_action('admin_post_helpy_import', [SettingsPage::class, 'handleImport']);
@@ -35,7 +37,7 @@ class Plugin {
                 wp_add_inline_script('postbox', "jQuery(function($){ postboxes.add_postbox_toggles('helpy-settings'); });");
             }
             // List bullets in admin globally (helps term panel too)
-            if (in_array($hook, ['settings_page_helpy-settings','term.php','edit-tags.php','index.php','post.php','post-new.php'], true)) {
+            if (in_array($hook, ['toplevel_page_helpy-links','settings_page_helpy-settings','term.php','edit-tags.php','index.php','post.php','post-new.php'], true)) {
                 wp_enqueue_style('helpy-admin', HELPY_URL.'assets/admin/admin.css', [], HELPY_VER);
             }
         });

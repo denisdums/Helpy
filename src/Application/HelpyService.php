@@ -47,7 +47,6 @@ class HelpyService {
             'project'        => '',
             'new_issue_path' => '/new?project={project}',
             'button_label'   => 'Create ticket',
-            'icon'           => '🐞',
         ]);
         return $t;
     }
@@ -68,4 +67,9 @@ class HelpyService {
         $path = strtr((string)$t['new_issue_path'], $repl);
         return rtrim($t['base_url'], '/') . '/' . ltrim($path, '/');
     }
+
+    public function getTicketButtonLabel(): string {
+        $t = $this->getTicketing();
+        return $t['button_label'] ?? 'Create ticket';
+    }   
 }

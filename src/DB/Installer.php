@@ -19,8 +19,6 @@ CREATE TABLE $links (
   scope_key  VARCHAR(60) NOT NULL,
   label VARCHAR(255) NOT NULL,
   url TEXT NOT NULL,
-  type VARCHAR(20) NOT NULL,
-  icon VARCHAR(16) NULL,
   target VARCHAR(10) NOT NULL DEFAULT '_blank',
   sort_order INT UNSIGNED NOT NULL DEFAULT 0,
   created_at DATETIME NOT NULL,

@@ -41,8 +41,6 @@ class ImportExportService {
         return [
             'label'      => $r['label'],
             'url'        => $r['url'],
-            'type'       => $r['type'],
-            'icon'       => $r['icon'],
             'target'     => $r['target'],
             'sort_order' => (int)$r['sort_order'],
         ];

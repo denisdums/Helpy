@@ -48,8 +48,6 @@ class LinkRepository {
                 'scope_key'  => $scopeKey,
                 'label'      => sanitize_text_field($l['label']),
                 'url'        => esc_url_raw($l['url']),
-                'type'       => in_array($l['type'] ?? 'custom', ['video','doc','custom'], true) ? $l['type'] : 'custom',
-                'icon'       => isset($l['icon']) ? sanitize_text_field($l['icon']) : null,
                 'target'     => ($l['target'] ?? '_blank') === '_self' ? '_self' : '_blank',
                 'sort_order' => intval($l['sort_order'] ?? $i),
                 'created_at' => current_time('mysql'),

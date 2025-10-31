@@ -5,17 +5,9 @@
     const i = tbody.querySelectorAll('tr').length;
     const tpl = `
       <tr>
-        <td><input type="number" name="items[${i}][sort_order]" value="${i}"></td>
+        <td class="helpy-hidden"><input type="number" name="items[${i}][sort_order]" value="${i}"></td>
         <td><input type="text" name="items[${i}][label]" placeholder="Titre du lien"></td>
         <td><input type="url" name="items[${i}][url]" placeholder="https://..."></td>
-        <td>
-          <select name="items[${i}][type]">
-            <option value="video">video</option>
-            <option value="doc">doc</option>
-            <option value="custom" selected>custom</option>
-          </select>
-        </td>
-        <td><input type="text" name="items[${i}][icon]" placeholder="🎥"></td>
         <td>
           <select name="items[${i}][target]">
             <option value="_blank" selected>_blank</option>

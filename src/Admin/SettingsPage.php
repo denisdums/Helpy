@@ -38,60 +38,103 @@ class SettingsPage
       'project'        => '',
       'new_issue_path' => '/new?project={project}',
       'button_label'   => 'Create ticket',
-      'icon'           => '🐞',
     ]);
 ?>
-    <div class="wrap">
-      <h1>Helpy — Réglages</h1>
-      <?php if (!empty($_GET['updated'])): ?>
-        <div class="notice notice-success">
-          <p>Réglages enregistrés.</p>
+    <div class="helpy-page wrap">
+      <h1 class="helpy-page__title">Helpy Setting</h2>
+        <div class="helpy-page__header">
+          <img src="<?php echo esc_url(plugins_url('../../assets/img/plugin-banner-background.png', __FILE__)); ?>" alt="Helpy Banner Background" class="helpy-page__header-banner" />
+          <div class="helpy-page__header__content">
+            <img src="<?php echo esc_url(plugins_url('../../assets/img/plugin-logo-white.svg', __FILE__)); ?>" alt="Helpy Logo" class="helpy-page__header-logo" />
+            <p class="helpy-page__header-baseline">for agencies and project managers who care about users.</p>
+          </div>
         </div>
-      <?php endif; ?>
-
-      <div id="poststuff">
-        <div id="post-body" class="metabox-holder columns-1">
-          <div id="post-body-content">
-            <div id="normal-sortables" class="meta-box-sortables ui-sortable">
-
-              <!-- Liens globaux -->
-              <div class="postbox">
-                <button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Basculer le panneau : Liens globaux</span><span class="toggle-indicator" aria-hidden="true"></span></button>
-                <h2 class="hndle"><span>Liens globaux</span></h2>
-                <div class="inside">
+        <div class="helpy-page__content">
+          <ul class="helpy-page__content__menu">
+            <li><a href="#global-links">Liens globaux</a></li>
+            <li><a href="#post-types-links">Liens par post type</a></li>
+            <li><a href="#taxonomies-links">Liens par taxonomie</a></li>
+            <li><a href="#ticketing">Ticketing</a></li>
+            <li><a href="#import-export">Import/Export</a></li>
+          </ul>
+          <div id="global-links" class="helpy-page__content__menu-tab">
+            <div class="helpy-page__content__menu-tab__content">
+              <p><b>Liens d’aide globaux</b></p>
+              <p>Ajoutez ici les liens de documentation, tutoriels vidéo ou pages de support que vous souhaitez rendre accessibles sur l’ensemble du site. Ces liens seront affichés dans le panneau “Aide” du tableau de bord et dans l’éditeur, pour tous les types de contenu.</p>
+              <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+                <?php wp_nonce_field('helpy_save'); ?>
+                <input type="hidden" name="action" value="helpy_save">
+                <input type="hidden" name="scope_type" value="global">
+                <input type="hidden" name="scope_key" value="global">
+                <table class="widefat striped helpy-table">
+                  <thead>
+                    <tr>
+                      <th class="helpy-hidden">Ordre</th>
+                      <th>Label</th>
+                      <th>URL</th>
+                      <th>Cible</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="helpy-global-tbody">
+                    <?php
+                    $rows = $grouped['global'] ?? [];
+                    foreach ($rows as $i => $r): ?>
+                      <tr>
+                        <td class="helpy-hidden"><input type="number" name="items[<?php echo $i; ?>][sort_order]" value="<?php echo (int)$r['sort_order']; ?>" /></td>
+                        <td><input type="text" name="items[<?php echo $i; ?>][label]" value="<?php echo esc_attr($r['label']); ?>" /></td>
+                        <td><input type="url" name="items[<?php echo $i; ?>][url]" value="<?php echo esc_url($r['url']); ?>" /></td>
+                        <td>
+                          <select name="items[<?php echo $i; ?>][target]">
+                            <option value="_blank" <?php selected($r['target'], '_blank'); ?>>_blank</option>
+                            <option value="_self" <?php selected($r['target'], '_self'); ?>>_self</option>
+                          </select>
+                        </td>
+                        <td><button type="button" class="button helpy-remove-row">Supprimer</button></td>
+                      </tr>
+                    <?php endforeach; ?>
+                  </tbody>
+                </table>
+                <div class="helpy__form__buttons">
+                  <p><button type="button" class="button button-outline-primary" data-add-row="#helpy-global-tbody">Ajouter un lien</button></p>
+                  <p><button type="submit" class="button button-secondary">Enregistrer</button></p>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div id="post-types-links" class="helpy-page__content__menu-tab">
+            <div class="helpy-page__content__menu-tab__content">
+              <p><b>Liens spécifiques par type de contenu</b></p>
+              <p>Vous pouvez définir ici des liens d’aide personnalisés pour chaque type de contenu (pages, articles, produits, etc.). Ces liens remplaceront ou compléteront les liens globaux afin d’offrir une aide ciblée selon le contexte.</p>
+              <hr>
+              <?php foreach ($postTypes as $slug => $obj):
+                $rows = $grouped['post_type'][$slug] ?? []; ?>
+                <details class="helpy-details" <?php if ($slug === array_key_first($postTypes)) : ?> open <?php endif; ?>>
+                  <summary>
+                    <h3 style="margin-top:0;"><?php echo esc_html($obj->labels->singular_name); ?></h3>
+                    <small><em><?php echo esc_html($slug); ?></em></small>
+                  </summary>
                   <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                     <?php wp_nonce_field('helpy_save'); ?>
                     <input type="hidden" name="action" value="helpy_save">
-                    <input type="hidden" name="scope_type" value="global">
-                    <input type="hidden" name="scope_key" value="global">
+                    <input type="hidden" name="scope_type" value="post_type">
+                    <input type="hidden" name="scope_key" value="<?php echo esc_attr($slug); ?>">
                     <table class="widefat striped helpy-table">
                       <thead>
                         <tr>
-                          <th>Ordre</th>
+                          <th class="helpy-hidden">Ordre</th>
                           <th>Label</th>
                           <th>URL</th>
-                          <th>Type</th>
-                          <th>Icône</th>
                           <th>Cible</th>
                           <th></th>
                         </tr>
                       </thead>
-                      <tbody id="helpy-global-tbody">
-                        <?php
-                        $rows = $grouped['global'] ?? [];
-                        foreach ($rows as $i => $r): ?>
+                      <tbody id="helpy-<?php echo esc_attr($slug); ?>-tbody">
+                        <?php foreach ($rows as $i => $r): ?>
                           <tr>
-                            <td><input type="number" name="items[<?php echo $i; ?>][sort_order]" value="<?php echo (int)$r['sort_order']; ?>" /></td>
+                            <td class="helpy-hidden"><input type="number" name="items[<?php echo $i; ?>][sort_order]" value="<?php echo (int)$r['sort_order']; ?>" /></td>
                             <td><input type="text" name="items[<?php echo $i; ?>][label]" value="<?php echo esc_attr($r['label']); ?>" /></td>
                             <td><input type="url" name="items[<?php echo $i; ?>][url]" value="<?php echo esc_url($r['url']); ?>" /></td>
-                            <td>
-                              <select name="items[<?php echo $i; ?>][type]">
-                                <?php foreach (['video', 'doc', 'custom'] as $t): ?>
-                                  <option value="<?php echo esc_attr($t); ?>" <?php selected($r['type'], $t); ?>><?php echo esc_html($t); ?></option>
-                                <?php endforeach; ?>
-                              </select>
-                            </td>
-                            <td><input type="text" name="items[<?php echo $i; ?>][icon]" value="<?php echo esc_attr($r['icon']); ?>" placeholder="🎥" /></td>
                             <td>
                               <select name="items[<?php echo $i; ?>][target]">
                                 <option value="_blank" <?php selected($r['target'], '_blank'); ?>>_blank</option>
@@ -103,196 +146,136 @@ class SettingsPage
                         <?php endforeach; ?>
                       </tbody>
                     </table>
-                    <p><button type="button" class="button" data-add-row="#helpy-global-tbody">Ajouter un lien</button></p>
-                    <p><button type="submit" class="button button-primary">Enregistrer</button></p>
-                  </form>
-                </div>
-              </div>
-
-              <!-- Liens par post type -->
-              <div class="postbox">
-                <button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Basculer le panneau : Liens par post type</span><span class="toggle-indicator" aria-hidden="true"></span></button>
-                <h2 class="hndle"><span>Liens par post type</span></h2>
-                <div class="inside">
-                  <?php foreach ($postTypes as $slug => $obj):
-                    $rows = $grouped['post_type'][$slug] ?? []; ?>
-                    <div class="helpy-pt-box">
-                      <h3 style="margin-top:0;"><?php echo esc_html($obj->labels->singular_name . " ({$slug})"); ?></h3>
-                      <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-                        <?php wp_nonce_field('helpy_save'); ?>
-                        <input type="hidden" name="action" value="helpy_save">
-                        <input type="hidden" name="scope_type" value="post_type">
-                        <input type="hidden" name="scope_key" value="<?php echo esc_attr($slug); ?>">
-                        <table class="widefat striped helpy-table">
-                          <thead>
-                            <tr>
-                              <th>Ordre</th>
-                              <th>Label</th>
-                              <th>URL</th>
-                              <th>Type</th>
-                              <th>Icône</th>
-                              <th>Cible</th>
-                              <th></th>
-                            </tr>
-                          </thead>
-                          <tbody id="helpy-<?php echo esc_attr($slug); ?>-tbody">
-                            <?php foreach ($rows as $i => $r): ?>
-                              <tr>
-                                <td><input type="number" name="items[<?php echo $i; ?>][sort_order]" value="<?php echo (int)$r['sort_order']; ?>" /></td>
-                                <td><input type="text" name="items[<?php echo $i; ?>][label]" value="<?php echo esc_attr($r['label']); ?>" /></td>
-                                <td><input type="url" name="items[<?php echo $i; ?>][url]" value="<?php echo esc_url($r['url']); ?>" /></td>
-                                <td>
-                                  <select name="items[<?php echo $i; ?>][type]">
-                                    <?php foreach (['video', 'doc', 'custom'] as $t): ?>
-                                      <option value="<?php echo esc_attr($t); ?>" <?php selected($r['type'], $t); ?>><?php echo esc_html($t); ?></option>
-                                    <?php endforeach; ?>
-                                  </select>
-                                </td>
-                                <td><input type="text" name="items[<?php echo $i; ?>][icon]" value="<?php echo esc_attr($r['icon']); ?>" /></td>
-                                <td>
-                                  <select name="items[<?php echo $i; ?>][target]">
-                                    <option value="_blank" <?php selected($r['target'], '_blank'); ?>>_blank</option>
-                                    <option value="_self" <?php selected($r['target'], '_self'); ?>>_self</option>
-                                  </select>
-                                </td>
-                                <td><button type="button" class="button helpy-remove-row">Supprimer</button></td>
-                              </tr>
-                            <?php endforeach; ?>
-                          </tbody>
-                        </table>
-                        <p><button type="button" class="button" data-add-row="#helpy-<?php echo esc_attr($slug); ?>-tbody">Ajouter un lien</button></p>
-                        <p><button type="submit" class="button button-primary">Enregistrer</button></p>
-                      </form>
+                    <div class="helpy__form__buttons">
+                      <p><button type="button" class="button button-outline-primary" data-add-row="#helpy-<?php echo esc_attr($slug); ?>-tbody">Ajouter un lien</button></p>
+                      <p><button type="submit" class="button button-secondary">Enregistrer</button></p>
                     </div>
-                    <hr>
-                  <?php endforeach; ?>
-                </div>
-              </div>
-
-              <!-- Liens par taxonomie (NOUVEAU) -->
-              <div class="postbox">
-                <button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Basculer le panneau : Liens par taxonomie</span><span class="toggle-indicator" aria-hidden="true"></span></button>
-                <h2 class="hndle"><span>Liens par taxonomie</span></h2>
-                <div class="inside">
-                  <?php foreach ($taxonomies as $tax => $obj):
-                    $rows = $grouped['taxonomy'][$tax] ?? []; ?>
-                    <div class="helpy-tax-box">
-                      <h3 style="margin-top:0;"><?php echo esc_html($obj->labels->singular_name . " ({$tax})"); ?></h3>
-                      <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-                        <?php wp_nonce_field('helpy_save'); ?>
-                        <input type="hidden" name="action" value="helpy_save">
-                        <input type="hidden" name="scope_type" value="taxonomy">
-                        <input type="hidden" name="scope_key" value="<?php echo esc_attr($tax); ?>">
-                        <table class="widefat striped helpy-table">
-                          <thead>
-                            <tr>
-                              <th>Ordre</th>
-                              <th>Label</th>
-                              <th>URL</th>
-                              <th>Type</th>
-                              <th>Icône</th>
-                              <th>Cible</th>
-                              <th></th>
-                            </tr>
-                          </thead>
-                          <tbody id="helpy-tax-<?php echo esc_attr($tax); ?>-tbody">
-                            <?php foreach ($rows as $i => $r): ?>
-                              <tr>
-                                <td><input type="number" name="items[<?php echo $i; ?>][sort_order]" value="<?php echo (int)$r['sort_order']; ?>" /></td>
-                                <td><input type="text" name="items[<?php echo $i; ?>][label]" value="<?php echo esc_attr($r['label']); ?>" /></td>
-                                <td><input type="url" name="items[<?php echo $i; ?>][url]" value="<?php echo esc_url($r['url']); ?>" /></td>
-                                <td>
-                                  <select name="items[<?php echo $i; ?>][type]">
-                                    <?php foreach (['video', 'doc', 'custom'] as $t): ?>
-                                      <option value="<?php echo esc_attr($t); ?>" <?php selected($r['type'], $t); ?>><?php echo esc_html($t); ?></option>
-                                    <?php endforeach; ?>
-                                  </select>
-                                </td>
-                                <td><input type="text" name="items[<?php echo $i; ?>][icon]" value="<?php echo esc_attr($r['icon']); ?>" /></td>
-                                <td>
-                                  <select name="items[<?php echo $i; ?>][target]">
-                                    <option value="_blank" <?php selected($r['target'], '_blank'); ?>>_blank</option>
-                                    <option value="_self" <?php selected($r['target'], '_self'); ?>>_self</option>
-                                  </select>
-                                </td>
-                                <td><button type="button" class="button helpy-remove-row">Supprimer</button></td>
-                              </tr>
-                            <?php endforeach; ?>
-                          </tbody>
-                        </table>
-                        <p><button type="button" class="button" data-add-row="#helpy-tax-<?php echo esc_attr($tax); ?>-tbody">Ajouter un lien</button></p>
-                        <p><button type="submit" class="button button-primary">Enregistrer</button></p>
-                      </form>
-                    </div>
-                    <hr>
-                  <?php endforeach; ?>
-                </div>
-              </div>
-
-              <!-- Ticketing -->
-              <div class="postbox">
-                <button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Basculer le panneau : Ticketing</span><span class="toggle-indicator" aria-hidden="true"></span></button>
-                <h2 class="hndle"><span>Ticketing</span></h2>
-                <div class="inside">
-                  <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-                    <?php wp_nonce_field('helpy_save'); ?>
-                    <input type="hidden" name="action" value="helpy_save">
-                    <input type="hidden" name="scope_type" value="ticketing">
-                    <table class="form-table">
-                      <tr>
-                        <th>Enable</th>
-                        <td><label><input type="checkbox" name="enabled" value="1" <?php checked($ticketing['enabled']); ?>> Yes</label></td>
-                      </tr>
-                      <tr>
-                        <th>Base URL</th>
-                        <td><input type="url" name="base_url" class="regular-text" value="<?php echo esc_attr($ticketing['base_url']); ?>" placeholder="https://yourdesk.example.com"></td>
-                      </tr>
-                      <tr>
-                        <th>Project (optional)</th>
-                        <td><input type="text" name="project" class="regular-text" value="<?php echo esc_attr($ticketing['project']); ?>"></td>
-                      </tr>
-                      <tr>
-                        <th>New issue path</th>
-                        <td><input type="text" name="new_issue_path" class="regular-text" value="<?php echo esc_attr($ticketing['new_issue_path']); ?>" placeholder="/new?project={project}&title={title}"></td>
-                      </tr>
-                      <tr>
-                        <th>Button label</th>
-                        <td><input type="text" name="button_label" class="regular-text" value="<?php echo esc_attr($ticketing['button_label']); ?>"></td>
-                      </tr>
-                      <tr>
-                        <th>Icon (emoji)</th>
-                        <td><input type="text" name="icon" class="regular-text" value="<?php echo esc_attr($ticketing['icon']); ?>" placeholder="🐞"></td>
-                      </tr>
-                    </table>
-                    <p><button type="submit" class="button button-primary">Save</button></p>
                   </form>
-                </div>
+                </details>
+                <?php if (next($postTypes)) : ?>
+                  <hr>
+                <?php endif; ?>
+              <?php endforeach; ?>
+            </div>
+          </div>
+        </div>
+        <div id="taxonomies-links" class="helpy-page__content__menu-tab">
+          <div class="helpy-page__content__menu-tab__content">
+            <p><b>Liens d’aide par taxonomie</b></p>
+            <p>Associez des liens de documentation ou de tutoriels à certaines taxonomies (catégories, étiquettes, etc.). Ces liens apparaîtront lors de l’édition des termes correspondants pour aider les utilisateurs à mieux comprendre leur utilisation.</p>
+            <hr>
+            <?php foreach ($taxonomies as $tax => $obj):
+              $rows = $grouped['taxonomy'][$tax] ?? []; ?>
+              <details class="helpy-details" <?php if ($tax === array_key_first($taxonomies)) : ?> open <?php endif; ?>>
+                <summary>
+                  <h3 style="margin-top:0;"><?php echo esc_html($obj->labels->singular_name); ?></h3>
+                  <small><em><?php echo esc_html($tax); ?></em></small>
+                </summary>
+                <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+                  <?php wp_nonce_field('helpy_save'); ?>
+                  <input type="hidden" name="action" value="helpy_save">
+                  <input type="hidden" name="scope_type" value="taxonomy">
+                  <input type="hidden" name="scope_key" value="<?php echo esc_attr($tax); ?>">
+                  <table class="widefat striped helpy-table">
+                    <thead>
+                      <tr>
+                        <th class="helpy-hidden">Ordre</th>
+                        <th>Label</th>
+                        <th>URL</th>
+                        <th>Cible</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody id="helpy-tax-<?php echo esc_attr($tax); ?>-tbody">
+                      <?php foreach ($rows as $i => $r): ?>
+                        <tr>
+                          <td class="helpy-hidden"><input type="number" name="items[<?php echo $i; ?>][sort_order]" value="<?php echo (int)$r['sort_order']; ?>" /></td>
+                          <td><input type="text" name="items[<?php echo $i; ?>][label]" value="<?php echo esc_attr($r['label']); ?>" /></td>
+                          <td><input type="url" name="items[<?php echo $i; ?>][url]" value="<?php echo esc_url($r['url']); ?>" /></td>
+                          <td>
+                            <select name="items[<?php echo $i; ?>][target]">
+                              <option value="_blank" <?php selected($r['target'], '_blank'); ?>>_blank</option>
+                              <option value="_self" <?php selected($r['target'], '_self'); ?>>_self</option>
+                            </select>
+                          </td>
+                          <td><button type="button" class="button helpy-remove-row">Supprimer</button></td>
+                        </tr>
+                      <?php endforeach; ?>
+                    </tbody>
+                  </table>
+                  <div class="helpy__form__buttons">
+                    <p><button type="button" class="button button-outline-primary" data-add-row="#helpy-tax-<?php echo esc_attr($tax); ?>-tbody">Ajouter un lien</button></p>
+                    <p><button type="submit" class="button button-secondary">Enregistrer</button></p>
+                  </div>
+
+                </form>
+              </details>
+              <?php if (next($taxonomies)) : ?>
+                <hr>
+              <?php endif; ?>
+            <?php endforeach; ?>
+          </div>
+        </div>
+        <div id="ticketing" class="helpy-page__content__menu-tab">
+          <div class="helpy-page__content__menu-tab__content">
+            <p><b>Configuration du ticketing</b></p>
+            <p>Définissez ici les paramètres permettant de créer un ticket directement depuis le tableau de bord. Vous pouvez renseigner l’URL de votre outil de support (Redmine, Jira, Trello, etc.) ou un lien vers un formulaire de contact afin que les utilisateurs puissent soumettre leurs demandes facilement.</p>
+            <hr>
+            <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+              <?php wp_nonce_field('helpy_save'); ?>
+              <input type="hidden" name="action" value="helpy_save">
+              <input type="hidden" name="scope_type" value="ticketing">
+              <table class="form-table">
+                <tr>
+                  <th>Activer le bouton vers l’outil de support</th>
+                  <td><label><input type="checkbox" name="enabled" value="1" <?php checked($ticketing['enabled']); ?>></label></td>
+                </tr>
+                <tr>
+                  <th>URL de base</th>
+                  <td><input type="url" name="base_url" class="regular-text" value="<?php echo esc_attr($ticketing['base_url']); ?>" placeholder="https://yourdesk.example.com"></td>
+                </tr>
+                <tr>
+                  <th>Projet (facultatif)</th>
+                  <td><input type="text" name="project" class="regular-text" value="<?php echo esc_attr($ticketing['project']); ?>"></td>
+                </tr>
+                <tr>
+                  <th>Chemin du nouveau ticket</th>
+                  <td><input type="text" name="new_issue_path" class="regular-text" value="<?php echo esc_attr($ticketing['new_issue_path']); ?>" placeholder="/new?project={project}&title={title}"></td>
+                </tr>
+                <tr>
+                  <th>Libellé du bouton</th>
+                  <td><input type="text" name="button_label" class="regular-text" value="<?php echo esc_attr($ticketing['button_label']); ?>"></td>
+                </tr>
+              </table>
+              <div class="helpy__form__buttons">
+                <p><button type="submit" class="button button-secondary">Enregistrer</button></p>
               </div>
-
-              <!-- Import / Export -->
-              <div class="postbox">
-                <button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Basculer le panneau : Import / Export</span><span class="toggle-indicator" aria-hidden="true"></span></button>
-                <h2 class="hndle"><span>Import / Export</span></h2>
-                <div class="inside">
-                  <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="display:inline-block;margin-right:16px;">
-                    <?php wp_nonce_field('helpy_export'); ?>
-                    <input type="hidden" name="action" value="helpy_export">
-                    <button type="submit" class="button">Exporter JSON</button>
-                  </form>
-
-                  <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="display:inline-block;vertical-align:top;max-width:100%;">
-                    <?php wp_nonce_field('helpy_import'); ?>
-                    <input type="hidden" name="action" value="helpy_import">
-                    <p><textarea name="payload" rows="8" cols="80" style="width:100%;" placeholder="Paste JSON here"></textarea></p>
-                    <p><button type="submit" class="button button-secondary">Importer (remplace)</button></p>
-                  </form>
-                </div>
+            </form>
+          </div>
+        </div>
+        <div id="import-export" class="helpy-page__content__menu-tab">
+          <div class="helpy-page__content__menu-tab__content">
+            <p><b>Importer une configuration</b></p>
+            <p>Chargez un fichier JSON précédemment exporté pour restaurer les réglages du plugin. L’import remplacera les paramètres existants par ceux contenus dans le fichier.</p>
+            <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+              <?php wp_nonce_field('helpy_import'); ?>
+              <input type="hidden" name="action" value="helpy_import">
+              <p><textarea name="payload" rows="8" cols="80" style="width:100%;" placeholder="Collez le JSON ici"></textarea></p>
+              <div class="helpy__form__buttons">
+                <p><button type="submit" class="button button-secondary">Importer la configuration</button></p>
               </div>
-
-            </div><!-- /normal-sortables -->
-          </div><!-- /post-body-content -->
-        </div><!-- /post-body -->
-      </div><!-- /poststuff -->
+            </form>
+            <hr>
+            <p><b>Exporter vos réglages</b></p>
+            <p>Sauvegardez la configuration actuelle du plugin au format JSON. Vous pourrez ainsi la réutiliser plus tard ou la partager avec un autre site pour retrouver exactement les mêmes paramètres.</p>
+            <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+              <?php wp_nonce_field('helpy_export'); ?>
+              <input type="hidden" name="action" value="helpy_export">
+              <button type="submit" class="button">Exporter la configuration JSON</button>
+            </form>
+          </div>
+        </div>
+    </div>
     </div>
 <?php
   }
@@ -313,8 +296,6 @@ class SettingsPage
           'sort_order' => intval($row['sort_order'] ?? 0),
           'label'      => sanitize_text_field($row['label'] ?? ''),
           'url'        => esc_url_raw($row['url'] ?? ''),
-          'type'       => in_array($row['type'] ?? 'custom', ['video', 'doc', 'custom'], true) ? $row['type'] : 'custom',
-          'icon'       => isset($row['icon']) ? sanitize_text_field($row['icon']) : '',
           'target'     => ($row['target'] ?? '_blank') === '_self' ? '_self' : '_blank',
         ];
       }, $_POST['items'] ?? []));
@@ -331,7 +312,6 @@ class SettingsPage
         'project'        => sanitize_text_field($_POST['project'] ?? ''),
         'new_issue_path' => sanitize_text_field($_POST['new_issue_path'] ?? '/new?project={project}'),
         'button_label'   => sanitize_text_field($_POST['button_label'] ?? 'Create ticket'),
-        'icon'           => sanitize_text_field($_POST['icon'] ?? '🐞'),
       ]);
     }
 

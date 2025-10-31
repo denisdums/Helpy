@@ -6,10 +6,10 @@
 
   const data = window.HELPY_DATA || { links: [], ticketing: {}, ctx: {} };
 
-  function LinkItem({label, url, icon, target}) {
+  function LinkItem({label, url, target}) {
     return h('li', { className: 'helpy-li' },
       h('a', { href: url, target: target || '_blank', rel:'noopener noreferrer' },
-        (icon ? icon + ' ' : ''), label
+        label
       )
     );
   }
@@ -30,6 +30,8 @@
 
     const href = ticketing.base_url.replace(/\/+$/,'') + '/' + String(path).replace(/^\/+/,'');
     const label = ticketing.button_label || 'Create ticket';
+    console.log('TicketButton href=', href);
+    console.log('TicketButton label=', label);
 
     return h('p', null,
       h('a', { className: 'components-button is-primary', href: href, target:'_blank', rel:'noopener noreferrer' },
