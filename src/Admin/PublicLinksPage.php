@@ -67,7 +67,7 @@ class PublicLinksPage
             <div class="helpy-page__content">
                 <ul class="helpy-page__content__menu">
                     <li><a href="#helpy-links-global">Globaux</a></li>
-                    <li><a href="#helpy-links-posttypes">Par post type</a></li>
+                    <li><a href="#helpy-links-posttypes">Par type de contenu</a></li>
                     <li><a href="#helpy-links-taxonomies">Par taxonomie</a></li>
                 </ul>
 
@@ -95,7 +95,7 @@ class PublicLinksPage
 
                 <div id="helpy-links-posttypes" class="helpy-page__content__menu-tab">
                     <div class="helpy-page__content__menu-tab__content">
-                        <p><b>Liens par post type</b></p>
+                        <p><b>Liens par type de contenu</b></p>
                         <p>Vous trouverez ici des liens adaptés au type de contenu que vous êtes en train d’éditer. Chaque section peut proposer des ressources spécifiques - par exemple des conseils pour rédiger une actualité, mettre en page une page d’accueil ou gérer un produit.</p>
                         <hr>
                         <?php foreach ($postTypes as $slug => $obj):

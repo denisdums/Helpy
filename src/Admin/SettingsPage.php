@@ -52,7 +52,7 @@ class SettingsPage
         <div class="helpy-page__content">
           <ul class="helpy-page__content__menu">
             <li><a href="#global-links">Liens globaux</a></li>
-            <li><a href="#post-types-links">Liens par post type</a></li>
+            <li><a href="#post-types-links">Liens par type de contenu</a></li>
             <li><a href="#taxonomies-links">Liens par taxonomie</a></li>
             <li><a href="#ticketing">Ticketing</a></li>
             <li><a href="#import-export">Import/Export</a></li>
