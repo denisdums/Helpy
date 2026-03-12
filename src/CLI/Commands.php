@@ -1,6 +1,8 @@
 <?php
 namespace Helpy\CLI;
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 use WP_CLI;
 use Helpy\Application\ImportExportService;
 
@@ -30,19 +32,19 @@ class Commands {
         $links = $wpdb->prefix.'helpy_links';
         $opts  = $wpdb->prefix.'helpy_options';
 
-        $ls = $wpdb->get_var("SHOW TABLES LIKE '{$links}'");
-        $os = $wpdb->get_var("SHOW TABLES LIKE '{$opts}'");
+        $ls = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $links ) ) );
+        $os = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $opts ) ) );
 
         WP_CLI::line("helpy_links: ".($ls ? 'OK' : 'MISSING'));
         WP_CLI::line("helpy_options: ".($os ? 'OK' : 'MISSING'));
-        if ($ls) WP_CLI::line('links count: '.$wpdb->get_var("SELECT COUNT(*) FROM {$links}"));
-        if ($os) WP_CLI::line('ticketing option: '.( $wpdb->get_var( $wpdb->prepare("SELECT COUNT(*) FROM {$opts} WHERE option_name=%s",'ticketing')) ? 'SET' : 'NOT SET' ));
+        if ($ls) WP_CLI::line( 'links count: ' . $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i', $links ) ) );
+        if ($os) WP_CLI::line( 'ticketing option: ' . ( $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i WHERE option_name=%s', $opts, 'ticketing' ) ) ? 'SET' : 'NOT SET' ) );
     }
 
     public function seed() {
         global $wpdb;
         $links = $wpdb->prefix.'helpy_links';
-        $wpdb->query($wpdb->prepare("DELETE FROM {$links} WHERE scope_type=%s AND scope_key=%s", 'global', 'global'));
+        $wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE scope_type=%s AND scope_key=%s', $links, 'global', 'global' ) );
         $wpdb->insert($links, [
             'scope_type'=>'global','scope_key'=>'global','label'=>'Tutorial – Basics','url'=>'https://loom.example/1','target'=>'_blank','sort_order'=>0,'created_at'=>current_time('mysql'),'updated_at'=>current_time('mysql')
         ]);

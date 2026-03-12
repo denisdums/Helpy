@@ -1,11 +1,14 @@
 <?php
-if ( ! defined('WP_UNINSTALL_PLUGIN') ) exit;
+if (!defined('WP_UNINSTALL_PLUGIN')) exit;
 
-global $wpdb;
-$links   = $wpdb->prefix . 'helpy_links';
-$options = $wpdb->prefix . 'helpy_options';
+if (defined('WP_UNINSTALL_PLUGIN')) {
+	global $wpdb;
 
-$wpdb->query("DROP TABLE IF EXISTS $links");
-$wpdb->query("DROP TABLE IF EXISTS $options");
+	$helpy_links = $wpdb->prefix . 'helpy_links';
+	$helpy_options = $wpdb->prefix . 'helpy_options';
 
-delete_option('helpy_schema_version');
+	$wpdb->query($wpdb->prepare('DROP TABLE IF EXISTS %i', $helpy_links));
+	$wpdb->query($wpdb->prepare('DROP TABLE IF EXISTS %i', $helpy_options));
+
+	delete_option('helpy_schema_version');
+}

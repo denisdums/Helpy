@@ -3,9 +3,9 @@ Contributors: denisdums
 Donate link: https://denisdums.com/
 Tags: help, admin, dashboard, gutenberg, documentation, tutorial, ticketing, workflow, client, taxonomy
 Requires at least: 6.2
-Tested up to: 6.8.3
+Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 1.2.0
+Stable tag: 0.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,7 +77,7 @@ Yes. Helpy can display links on taxonomy edit pages and inside individual term f
 
 = How does the ticketing button work? =
 
-Helpy provides a generic ticketing system.  
+Helpy provides a generic ticketing system.
 You define a base URL and placeholders (e.g. `{project}`, `{title}`, `{term}`, `{postType}`), and it automatically builds a link to your issue creation page.
 
 Examples:
@@ -125,7 +125,7 @@ Yes. You can export or import your entire configuration as a JSON file from the 
 == Upgrade Notice ==
 
 = 1.2.0 =
-Adds taxonomy and term-level contextual help, a generic ticketing system, and improved import/export.  
+Adds taxonomy and term-level contextual help, a generic ticketing system, and improved import/export.
 Update recommended for expanded flexibility.
 
 == Developer Notes ==
@@ -163,5 +163,5 @@ Helpy follows WordPress security best practices (nonces, capabilities, sanitizat
 
 == Credits ==
 
-Built with ❤️ by [Denis Dumont](https://denisdums.com/)  
+Built with ❤️ by [Denis Dumont](https://denisdums.com/)
 for agencies and project managers who care about users

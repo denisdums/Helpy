@@ -2,6 +2,8 @@
 
 namespace Helpy\Taxonomy;
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 use Helpy\Application\HelpyService;
 
 class TermPanel

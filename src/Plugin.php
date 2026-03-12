@@ -1,6 +1,8 @@
 <?php
 namespace Helpy;
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 use Helpy\Admin\SettingsPage;
 use Helpy\Admin\PublicLinksPage;
 use Helpy\Dashboard\Widget;

@@ -5,11 +5,10 @@
  * Plugin URI:      https://denisdums.com/helpy
  * Description:     Build for agencies and project managers who care about user autonomy and clarity.
  * Author:          denisdums
- * Author URI:      https://denisdums.com
  * Text Domain:     helpy
  * Domain Path:     /languages
  * Version:         0.1.0
- * 
+ * License:         GPL-2.0+
  *
  * @package         Helpy
  */
@@ -38,7 +37,6 @@ function helpy_uninstall_hook()
 }
 
 add_action('plugins_loaded', function () {
-    load_plugin_textdomain('helpy', false, dirname(plugin_basename(__FILE__)) . '/languages/');
     (new Helpy\Plugin())->init();
 });
 

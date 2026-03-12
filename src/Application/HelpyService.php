@@ -1,6 +1,8 @@
 <?php
 namespace Helpy\Application;
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 use Helpy\DB\LinkRepository;
 use Helpy\DB\OptionsRepository;
 use Helpy\Domain\Scope;
@@ -71,5 +73,5 @@ class HelpyService {
     public function getTicketButtonLabel(): string {
         $t = $this->getTicketing();
         return $t['button_label'] ?? 'Create ticket';
-    }   
+    }
 }

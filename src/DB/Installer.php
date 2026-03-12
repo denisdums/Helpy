@@ -2,6 +2,8 @@
 
 namespace Helpy\DB;
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 class Installer
 {
     public static function activate(): void

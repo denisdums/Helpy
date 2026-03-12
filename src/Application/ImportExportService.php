@@ -1,6 +1,8 @@
 <?php
 namespace Helpy\Application;
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 use Helpy\DB\LinkRepository;
 use Helpy\DB\OptionsRepository;
 use Helpy\Domain\Scope;

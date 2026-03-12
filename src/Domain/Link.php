@@ -1,6 +1,8 @@
 <?php
 namespace Helpy\Domain;
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 class Link {
     public string $label;
     public string $url;

@@ -1,6 +1,8 @@
 <?php
 namespace Helpy\DB;
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 use wpdb;
 
 class LinkRepository {

@@ -1,6 +1,8 @@
 <?php
 namespace Helpy\Editor;
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 use Helpy\Application\HelpyService;
 
 class Sidebar {

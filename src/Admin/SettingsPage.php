@@ -2,6 +2,8 @@
 
 namespace Helpy\Admin;
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 use Helpy\Application\ImportExportService;
 use Helpy\DB\LinkRepository;
 use Helpy\DB\OptionsRepository;
@@ -41,7 +43,7 @@ class SettingsPage
     ]);
 ?>
     <div class="helpy-page wrap">
-      <h1 class="helpy-page__title">Helpy Setting</h2>
+      <h1 class="helpy-page__title">Helpy Setting</h1>
         <div class="helpy-page__header">
           <img src="<?php echo esc_url(plugins_url('../../assets/img/plugin-banner-background.png', __FILE__)); ?>" alt="Helpy Banner Background" class="helpy-page__header-banner" />
           <div class="helpy-page__header__content">
@@ -81,11 +83,11 @@ class SettingsPage
                     $rows = $grouped['global'] ?? [];
                     foreach ($rows as $i => $r): ?>
                       <tr>
-                        <td class="helpy-hidden"><input type="number" name="items[<?php echo $i; ?>][sort_order]" value="<?php echo (int)$r['sort_order']; ?>" /></td>
-                        <td><input type="text" name="items[<?php echo $i; ?>][label]" value="<?php echo esc_attr($r['label']); ?>" /></td>
-                        <td><input type="url" name="items[<?php echo $i; ?>][url]" value="<?php echo esc_url($r['url']); ?>" /></td>
+                        <td class="helpy-hidden"><input type="number" name="items[<?php echo esc_attr((string) $i); ?>][sort_order]" value="<?php echo (int)$r['sort_order']; ?>" /></td>
+                        <td><input type="text" name="items[<?php echo esc_attr((string) $i); ?>][label]" value="<?php echo esc_attr($r['label']); ?>" /></td>
+                        <td><input type="url" name="items[<?php echo esc_attr((string) $i); ?>][url]" value="<?php echo esc_url($r['url']); ?>" /></td>
                         <td>
-                          <select name="items[<?php echo $i; ?>][target]">
+                          <select name="items[<?php echo esc_attr((string) $i); ?>][target]">
                             <option value="_blank" <?php selected($r['target'], '_blank'); ?>>_blank</option>
                             <option value="_self" <?php selected($r['target'], '_self'); ?>>_self</option>
                           </select>
@@ -132,11 +134,11 @@ class SettingsPage
                       <tbody id="helpy-<?php echo esc_attr($slug); ?>-tbody">
                         <?php foreach ($rows as $i => $r): ?>
                           <tr>
-                            <td class="helpy-hidden"><input type="number" name="items[<?php echo $i; ?>][sort_order]" value="<?php echo (int)$r['sort_order']; ?>" /></td>
-                            <td><input type="text" name="items[<?php echo $i; ?>][label]" value="<?php echo esc_attr($r['label']); ?>" /></td>
-                            <td><input type="url" name="items[<?php echo $i; ?>][url]" value="<?php echo esc_url($r['url']); ?>" /></td>
+                            <td class="helpy-hidden"><input type="number" name="items[<?php echo esc_attr((string) $i); ?>][sort_order]" value="<?php echo (int)$r['sort_order']; ?>" /></td>
+                            <td><input type="text" name="items[<?php echo esc_attr((string) $i); ?>][label]" value="<?php echo esc_attr($r['label']); ?>" /></td>
+                            <td><input type="url" name="items[<?php echo esc_attr((string) $i); ?>][url]" value="<?php echo esc_url($r['url']); ?>" /></td>
                             <td>
-                              <select name="items[<?php echo $i; ?>][target]">
+                              <select name="items[<?php echo esc_attr((string) $i); ?>][target]">
                                 <option value="_blank" <?php selected($r['target'], '_blank'); ?>>_blank</option>
                                 <option value="_self" <?php selected($r['target'], '_self'); ?>>_self</option>
                               </select>
@@ -189,11 +191,11 @@ class SettingsPage
                     <tbody id="helpy-tax-<?php echo esc_attr($tax); ?>-tbody">
                       <?php foreach ($rows as $i => $r): ?>
                         <tr>
-                          <td class="helpy-hidden"><input type="number" name="items[<?php echo $i; ?>][sort_order]" value="<?php echo (int)$r['sort_order']; ?>" /></td>
-                          <td><input type="text" name="items[<?php echo $i; ?>][label]" value="<?php echo esc_attr($r['label']); ?>" /></td>
-                          <td><input type="url" name="items[<?php echo $i; ?>][url]" value="<?php echo esc_url($r['url']); ?>" /></td>
+                          <td class="helpy-hidden"><input type="number" name="items[<?php echo esc_attr((string) $i); ?>][sort_order]" value="<?php echo (int)$r['sort_order']; ?>" /></td>
+                          <td><input type="text" name="items[<?php echo esc_attr((string) $i); ?>][label]" value="<?php echo esc_attr($r['label']); ?>" /></td>
+                          <td><input type="url" name="items[<?php echo esc_attr((string) $i); ?>][url]" value="<?php echo esc_url($r['url']); ?>" /></td>
                           <td>
-                            <select name="items[<?php echo $i; ?>][target]">
+                            <select name="items[<?php echo esc_attr((string) $i); ?>][target]">
                               <option value="_blank" <?php selected($r['target'], '_blank'); ?>>_blank</option>
                               <option value="_self" <?php selected($r['target'], '_self'); ?>>_self</option>
                             </select>
@@ -276,7 +278,6 @@ class SettingsPage
           </div>
         </div>
     </div>
-    </div>
 <?php
   }
 
@@ -285,20 +286,26 @@ class SettingsPage
     if (!current_user_can('manage_options')) wp_die('Forbidden');
     check_admin_referer('helpy_save');
 
-    $scopeType = sanitize_text_field($_POST['scope_type'] ?? '');
+    $scopeType = isset($_POST['scope_type']) ? sanitize_text_field(wp_unslash($_POST['scope_type'])) : '';
 
     if (in_array($scopeType, ['global', 'post_type', 'taxonomy'], true)) {
-      $scopeKey = sanitize_text_field($_POST['scope_key'] ?? '');
+      $scopeKey = isset($_POST['scope_key']) ? sanitize_text_field(wp_unslash($_POST['scope_key'])) : '';
       if ($scopeType === 'global') $scopeKey = Scope::GLOBAL;
 
+      $rawItems = isset($_POST['items']) && is_array($_POST['items']) ? wp_unslash($_POST['items']) : [];
+
       $items = array_values(array_map(function ($row) {
+        if (!is_array($row)) {
+          $row = [];
+        }
+
         return [
           'sort_order' => intval($row['sort_order'] ?? 0),
           'label'      => sanitize_text_field($row['label'] ?? ''),
           'url'        => esc_url_raw($row['url'] ?? ''),
           'target'     => ($row['target'] ?? '_blank') === '_self' ? '_self' : '_blank',
         ];
-      }, $_POST['items'] ?? []));
+      }, $rawItems));
 
       $items = array_values(array_filter($items, fn($i) => $i['label'] && $i['url']));
 
@@ -307,11 +314,11 @@ class SettingsPage
       $repo->bulkInsert($scopeType, $scopeKey, $items);
     } elseif ($scopeType === 'ticketing') {
       (new OptionsRepository())->set('ticketing', [
-        'enabled'        => !empty($_POST['enabled']),
-        'base_url'       => esc_url_raw($_POST['base_url'] ?? ''),
-        'project'        => sanitize_text_field($_POST['project'] ?? ''),
-        'new_issue_path' => sanitize_text_field($_POST['new_issue_path'] ?? '/new?project={project}'),
-        'button_label'   => sanitize_text_field($_POST['button_label'] ?? 'Create ticket'),
+        'enabled'        => isset($_POST['enabled']) && '1' === wp_unslash($_POST['enabled']),
+        'base_url'       => isset($_POST['base_url']) ? esc_url_raw(wp_unslash($_POST['base_url'])) : '',
+        'project'        => isset($_POST['project']) ? sanitize_text_field(wp_unslash($_POST['project'])) : '',
+        'new_issue_path' => isset($_POST['new_issue_path']) ? sanitize_text_field(wp_unslash($_POST['new_issue_path'])) : '/new?project={project}',
+        'button_label'   => isset($_POST['button_label']) ? sanitize_text_field(wp_unslash($_POST['button_label'])) : 'Create ticket',
       ]);
     }
 
@@ -337,7 +344,8 @@ class SettingsPage
     if (!current_user_can('manage_options')) wp_die('Forbidden');
     check_admin_referer('helpy_import');
 
-    $payload = wp_unslash($_POST['payload'] ?? '');
+    // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Raw JSON payload must remain intact before validation with json_decode().
+    $payload = isset($_POST['payload']) ? wp_unslash((string) $_POST['payload']) : '';
     $data = json_decode($payload, true);
 
     if (json_last_error() === JSON_ERROR_NONE && is_array($data)) {

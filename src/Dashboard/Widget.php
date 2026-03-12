@@ -1,6 +1,8 @@
 <?php
 namespace Helpy\Dashboard;
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 use Helpy\Application\HelpyService;
 
 class Widget {

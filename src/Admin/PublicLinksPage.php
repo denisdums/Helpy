@@ -2,6 +2,8 @@
 
 namespace Helpy\Admin;
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 use Helpy\DB\LinkRepository;
 use Helpy\DB\OptionsRepository;
 use Helpy\Application\HelpyService;
