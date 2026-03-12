@@ -7,7 +7,7 @@
  * Author:          denisdums
  * Text Domain:     helpy
  * Domain Path:     /languages
- * Version:         0.1.0
+ * Version:         1.0.0
  * License:         GPL-2.0+
  *
  * @package         Helpy
