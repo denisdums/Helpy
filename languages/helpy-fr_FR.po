@@ -1,0 +1,247 @@
+# Copyright (C) 2026 denisdums
+# This file is distributed under the GPL-2.0+.
+msgid ""
+msgstr ""
+"Project-Id-Version: Helpy 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/helpy\n"
+"Last-Translator: <denis@sandbox-wordpress-web>\n"
+"Language-Team: French <traduc@traduc.org>\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-03-12T21:19:32+01:00\n"
+"PO-Revision-Date: 2026-03-12 21:50+0100\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: helpy\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. Plugin Name of the plugin
+#: helpy.php src/Admin/SettingsPage.php:18
+msgid "Helpy"
+msgstr "Helpy"
+
+#. Plugin URI of the plugin
+#: helpy.php
+msgid "https://denisdums.com/helpy"
+msgstr "https://denisdums.com/helpy"
+
+#. Description of the plugin
+#: helpy.php
+msgid ""
+"Build for agencies and project managers who care about user autonomy and "
+"clarity."
+msgstr ""
+"Conçu pour les agences et chefs de projet soucieux de l’autonomie et de la "
+"clarté pour les utilisateurs."
+
+#. Author of the plugin
+#: helpy.php
+msgid "denisdums"
+msgstr "denisdums"
+
+#: src/Admin/PublicLinksPage.php:25
+msgid "Helpy - Links"
+msgstr "Helpy - Liens"
+
+#: src/Admin/PublicLinksPage.php:26
+msgid "Liens utiles"
+msgstr "Liens utiles"
+
+#: src/Admin/SettingsPage.php:17 src/Admin/SettingsPage.php:46
+msgid "Helpy Settings"
+msgstr "Réglages Helpy"
+
+#: src/Admin/SettingsPage.php:42 src/Admin/SettingsPage.php:435
+msgid "Create ticket"
+msgstr "Créer un ticket"
+
+#: src/Admin/SettingsPage.php:55
+msgid "for agencies and project managers who care about users."
+msgstr "pour les agences et chefs de projet soucieux de leurs utilisateurs."
+
+#: src/Admin/SettingsPage.php:62
+msgid "Liens globaux"
+msgstr "Liens globaux"
+
+#: src/Admin/SettingsPage.php:65
+msgid "Liens par type de contenu"
+msgstr "Liens par type de contenu"
+
+#: src/Admin/SettingsPage.php:68
+msgid "Liens par taxonomie"
+msgstr "Liens par taxonomie"
+
+#: src/Admin/SettingsPage.php:71
+msgid "Ticketing"
+msgstr "Ticketing"
+
+#: src/Admin/SettingsPage.php:74
+msgid "Import/Export"
+msgstr "Import / Export"
+
+#: src/Admin/SettingsPage.php:79
+msgid "Liens d’aide globaux"
+msgstr "Liens d’aide globaux"
+
+#: src/Admin/SettingsPage.php:80
+msgid ""
+"Ajoutez ici les liens de documentation, tutoriels vidéo ou pages de support "
+"que vous\n"
+"\t\t\t\t\t\t\tsouhaitez rendre accessibles sur l’ensemble du site. Ces liens "
+"seront affichés dans le\n"
+"\t\t\t\t\t\t\tpanneau “Aide” du tableau de bord et dans l’éditeur, pour tous "
+"les types de contenu."
+msgstr ""
+"Ajoutez ici les liens de documentation, tutoriels vidéo ou pages de support "
+"que vous souhaitez rendre accessibles sur l’ensemble du site. Ces liens "
+"seront affichés dans le panneau « Aide » du tableau de bord et dans "
+"l’éditeur pour tous les types de contenu."
+
+#: src/Admin/SettingsPage.php:92 src/Admin/SettingsPage.php:171
+#: src/Admin/SettingsPage.php:257
+msgid "Ordre"
+msgstr "Ordre"
+
+#: src/Admin/SettingsPage.php:94 src/Admin/SettingsPage.php:173
+#: src/Admin/SettingsPage.php:259
+msgid "Label"
+msgstr "Libellé"
+
+#: src/Admin/SettingsPage.php:95 src/Admin/SettingsPage.php:174
+#: src/Admin/SettingsPage.php:260
+msgid "URL"
+msgstr "URL"
+
+#: src/Admin/SettingsPage.php:96 src/Admin/SettingsPage.php:175
+#: src/Admin/SettingsPage.php:261
+msgid "Cible"
+msgstr "Cible"
+
+#: src/Admin/SettingsPage.php:124 src/Admin/SettingsPage.php:205
+#: src/Admin/SettingsPage.php:289
+msgid "Supprimer"
+msgstr "Supprimer"
+
+#: src/Admin/SettingsPage.php:135 src/Admin/SettingsPage.php:216
+#: src/Admin/SettingsPage.php:300
+msgid "Ajouter un lien"
+msgstr "Ajouter un lien"
+
+#: src/Admin/SettingsPage.php:140 src/Admin/SettingsPage.php:221
+#: src/Admin/SettingsPage.php:305 src/Admin/SettingsPage.php:361
+msgid "Enregistrer"
+msgstr "Enregistrer"
+
+#: src/Admin/SettingsPage.php:149
+msgid "Liens spécifiques par type de contenu"
+msgstr "Liens spécifiques par type de contenu"
+
+#: src/Admin/SettingsPage.php:150
+msgid ""
+"Vous pouvez définir ici des liens d’aide personnalisés pour chaque type de "
+"contenu (pages,\n"
+"\t\t\t\t\t\t\tarticles, produits, etc.). Ces liens remplaceront ou "
+"compléteront les liens globaux afin\n"
+"\t\t\t\t\t\t\td’offrir une aide ciblée selon le contexte."
+msgstr ""
+"Vous pouvez définir ici des liens d’aide personnalisés pour chaque type de "
+"contenu (pages, articles, produits, etc.). Ces liens remplaceront ou "
+"compléteront les liens globaux afin d’offrir une aide adaptée au contexte."
+
+#: src/Admin/SettingsPage.php:235
+msgid "Liens d’aide par taxonomie"
+msgstr "Liens d’aide par taxonomie"
+
+#: src/Admin/SettingsPage.php:236
+msgid ""
+"Associez des liens de documentation ou de tutoriels à certaines taxonomies "
+"(catégories,\n"
+"\t\t\t\t\t\tétiquettes, etc.). Ces liens apparaîtront lors de l’édition des "
+"termes correspondants pour aider\n"
+"\t\t\t\t\t\tles utilisateurs à mieux comprendre leur utilisation."
+msgstr ""
+"Associez des liens de documentation ou de tutoriels à certaines taxonomies "
+"(catégories, étiquettes, etc.). Ces liens apparaîtront lors de l’édition des "
+"termes correspondants afin d’aider les utilisateurs à mieux comprendre leur "
+"utilisation."
+
+#: src/Admin/SettingsPage.php:319
+msgid "Configuration du ticketing"
+msgstr "Configuration du ticketing"
+
+#: src/Admin/SettingsPage.php:320
+msgid ""
+"Définissez ici les paramètres permettant de créer un ticket directement "
+"depuis le tableau de\n"
+"\t\t\t\t\t\tbord. Vous pouvez renseigner l’URL de votre outil de support "
+"(Redmine, Jira, Trello, etc.) ou un\n"
+"\t\t\t\t\t\tlien vers un formulaire de contact afin que les utilisateurs "
+"puissent soumettre leurs demandes\n"
+"\t\t\t\t\t\tfacilement."
+msgstr ""
+"Définissez ici les paramètres permettant de créer un ticket directement "
+"depuis le tableau de bord. Vous pouvez renseigner l’URL de votre outil de "
+"support (Redmine, Jira, Trello, etc.) ou un lien vers un formulaire de "
+"contact afin que les utilisateurs puissent soumettre leurs demandes "
+"facilement."
+
+#: src/Admin/SettingsPage.php:331
+msgid "Activer le bouton vers l’outil de support"
+msgstr "Activer le bouton vers l’outil de support"
+
+#: src/Admin/SettingsPage.php:336
+msgid "URL de base"
+msgstr "URL de base"
+
+#: src/Admin/SettingsPage.php:342
+msgid "Projet (facultatif)"
+msgstr "Projet (facultatif)"
+
+#: src/Admin/SettingsPage.php:347
+msgid "Chemin du nouveau ticket"
+msgstr "Chemin du nouveau ticket"
+
+#: src/Admin/SettingsPage.php:353
+msgid "Libellé du bouton"
+msgstr "Libellé du bouton"
+
+#: src/Admin/SettingsPage.php:369
+msgid "Importer une configuration"
+msgstr "Importer une configuration"
+
+#: src/Admin/SettingsPage.php:370
+msgid ""
+"Chargez un fichier JSON précédemment exporté pour restaurer les réglages du "
+"plugin. L’import remplacera les paramètres existants par ceux contenus dans "
+"le fichier."
+msgstr ""
+"Chargez un fichier JSON précédemment exporté pour restaurer les réglages du "
+"plugin. L’import remplacera les paramètres existants par ceux contenus dans "
+"le fichier."
+
+#: src/Admin/SettingsPage.php:375
+msgid "Collez le JSON ici"
+msgstr "Collez le JSON ici"
+
+#: src/Admin/SettingsPage.php:379
+msgid "Importer la configuration"
+msgstr "Importer la configuration"
+
+#: src/Admin/SettingsPage.php:385
+msgid "Exporter vos réglages"
+msgstr "Exporter vos réglages"
+
+#: src/Admin/SettingsPage.php:386
+msgid ""
+"Sauvegardez la configuration actuelle du plugin au format JSON. Vous pourrez "
+"ainsi la réutiliser plus tard ou la partager avec un autre site pour "
+"retrouver exactement les mêmes paramètres."
+msgstr ""
+"Sauvegardez la configuration actuelle du plugin au format JSON. Vous "
+"pourrez ainsi la réutiliser plus tard ou la partager avec un autre site "
+"pour retrouver exactement les mêmes paramètres."
+
+#: src/Admin/SettingsPage.php:390
+msgid "Exporter la configuration JSON"
+msgstr "Exporter la configuration JSON"
