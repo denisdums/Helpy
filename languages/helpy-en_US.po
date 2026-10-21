@@ -240,3 +240,9 @@ msgstr ""
 #: src/Admin/SettingsPage.php:390
 msgid "Exporter la configuration JSON"
 msgstr "Export JSON configuration"
+
+#. translators: %s: order number
+#: src/Domain/EditedContent.php:19
+#, php-format
+msgid "Order #%s"
+msgstr "Order #%s"

@@ -4,6 +4,7 @@ namespace Helpy\Editor;
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 use Helpy\Application\HelpyService;
+use Helpy\Domain\EditedContent;
 
 class Metabox {
     public static function register(): void {
@@ -14,9 +15,10 @@ class Metabox {
         add_meta_box('helpy_box', 'Helpy', [self::class, 'render'], null, 'side', 'high');
     }
 
-    public static function render(\WP_Post $post): void {
+    public static function render(\WP_Post|\WC_Order $edited): void {
+        $content = EditedContent::from($edited);
         $service = new HelpyService();
-        $links   = $service->getLinksForPostType($post->post_type);
+        $links   = $service->getLinksForPostType($content->getPostType());
 
         echo '<div class="helpy-box">';
         if ($links) {
@@ -30,11 +32,7 @@ class Metabox {
             echo '<p>Aucun lien configuré pour ce type de contenu.</p>';
         }
 
-        $href = $service->buildTicketUrl([
-            'postId'   => $post->ID,
-            'postType' => $post->post_type,
-            'title'    => get_the_title($post),
-        ]);
+        $href = $service->buildTicketUrl($content->getTicketContext());
         $label = $service->getTicketButtonLabel();
 
         if ($href) {
